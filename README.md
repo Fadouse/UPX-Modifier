@@ -16,6 +16,6 @@ pip install -r requirements.txt
 ## Usage
 To patch a PE file, run the following command:
 ```
-python src/patch_ep.py <path_to_executable_file>
+python patch_ep.py <path_to_executable_file>
 ```
 The patched file will be saved with a "_patched" suffix in the same directory.
