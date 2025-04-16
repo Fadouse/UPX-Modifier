@@ -1,3 +1,4 @@
+import argparse
 import pefile
 import sys
 import os
@@ -142,19 +143,28 @@ def patch_pe_file(input_path, output_path):
             pe.close()
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print(f"Usage: python {os.path.basename(__file__)} <path_to_executable_file>")
-        sys.exit(1)
-
-    input_file = sys.argv[1]
-
+    # Set up argument parser
+    parser = argparse.ArgumentParser(description='UPX Patcher - Cleans UPX signatures from PE files')
+    parser.add_argument('input_file', help='Path to the executable file to process')
+    parser.add_argument('-o', '--output', help='Custom output file path (default: inputfile_patched.ext)')
+    
+    # Parse arguments
+    args = parser.parse_args()
+    
+    input_file = args.input_file
+    
     if not os.path.isfile(input_file):
         print(f"[x] Error: Input file not found or is not a file: {input_file}")
         sys.exit(1)
-
+    
     # Create output filename
-    base, ext = os.path.splitext(input_file)
-    output_file = f"{base}_patched{ext}"
-
+    if args.output:
+        output_file = args.output
+        print(f"[/] Custom output path specified: {output_file}")
+    else:
+        base, ext = os.path.splitext(input_file)
+        output_file = f"{base}_patched{ext}"
+    
     # Start patching process
     patch_pe_file(input_file, output_file)
+
